@@ -1,13 +1,20 @@
 require 'rubygems'
 require 'rbosa'
+require 'scrobbler'
 
 class Mounce
   attr_reader :artist, :track
 
   def initialize(config_file='~/.mounce.yml')
-    config(File.expand_path(config_file))
-    @itunes = OSA.app('iTunes')
-    @artist, @track = find_song_information
+    raise
+      config(File.expand_path(config_file))
+      @itunes = OSA.app('iTunes')
+      @artist, @track = find_song_information
+    unless @config['lastfm_user']?
+      @lastfm_user = Scrobbler::User.new(@config['lastfm_user'])
+      @artist = "Artist"
+      @track = @lastfm_user.recent_tracks[0]
+    end
   end
 
   def message(tag='#music')
