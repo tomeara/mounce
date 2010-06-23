@@ -6,6 +6,7 @@ The Music annOUNCEr for Presently. Mounce will post your current iTunes track to
 
 * itunes/osx
 * rubyosa
+* scrobbler
 * curl (with https support)
 
 == Getting Started
@@ -19,6 +20,7 @@ Create ~/.mounce.yml and fill it with the following:
     username: <username>
     password: <password>
     api: 'https://<account>.presently.com/api/twitter/statuses/update.xml'
+	lastfm_user: <Last.FM username>
 
 You can see this help file by typing:
 

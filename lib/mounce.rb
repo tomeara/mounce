@@ -6,20 +6,24 @@ class Mounce
   attr_reader :artist, :track
 
   def initialize(config_file='~/.mounce.yml')
-    raise
       config(File.expand_path(config_file))
       @itunes = OSA.app('iTunes')
+    if @config[:lastfm_user].nil?
       @artist, @track = find_song_information
-    unless @config['lastfm_user']?
-      @lastfm_user = Scrobbler::User.new(@config['lastfm_user'])
-      @artist = "Artist"
-      @track = @lastfm_user.recent_tracks[0]
+    else
+      @lastfm_user = Scrobbler::User.new(@config[:lastfm_user])
+      @artist = @lastfm_user.recent_tracks.first.artist
+      @track = @lastfm_user.recent_tracks.first.name
     end
   end
 
   def message(tag='#music')
-    text = [@artist, @track].compact.join(' - ')
-    "#{tag} #{text}"
+    if @config[:lastfm_user].nil?
+      text = [@artist, @track].compact.join(' - ')
+      "#{tag} #{text}"
+    else
+      "#{tag} #{@artist} - #{@track}"
+    end
   end
 
   def share!

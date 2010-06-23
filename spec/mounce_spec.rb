@@ -45,5 +45,19 @@ describe Mounce do
       @mounce.message.should == '#music Bush - Greedy Fly'
     end
   end
+  
+  context 'LastFM' do
+    before(:all) do
+      mock_lastfm_user = Scrobbler::User.new('tomeara')
+      mock_track = mock(:track, :artist => mock_lastfm_user.recent_tracks.first.artist, :name => mock_lastfm_user.recent_tracks.first.name)
+      mock_osa = mock(:osa, :current_stream_title => nil, :current_track => mock_track)
+      OSA.stub!(:app).with('iTunes').and_return(mock_osa)
+      @mounce = Mounce.new('spec/mounce.yml')
+    end
+    
+    it 'should tag the message' do
+      puts @mounce.message
+    end
+  end
 end
 
